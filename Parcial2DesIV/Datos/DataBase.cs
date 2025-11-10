@@ -9,29 +9,20 @@ using Parcial2DesIV.Modelos;
 
 namespace Parcial2DesIV.Datos
 {
-    /// <summary>
-    /// Clase responsable de las operaciones de acceso a datos relacionadas con usuarios,
-    /// cuentas y transacciones. Encapsula la conexión a la base de datos y comandos.
-    /// </summary>
+    // Clase responsable de las operaciones de acceso a datos relacionadas con usuarios,
+    // cuentas y transacciones. Encapsula la conexión a la base de datos y comandos.
+
     public class Database
     {
-        // Conexión a la base de datos PostgreSQL. Se inicializa en el constructor
-        // usando la cadena de conexión definida en el archivo de configuración.
         private Npgsql.NpgsqlConnection _con;
 
-        // Objeto comando que se reutiliza para ejecutar consultas y funciones en la BD.
         Npgsql.NpgsqlCommand _cmd;
 
-        // Adaptador usado para llenar conjuntos de datos (DataSet) a partir del comando.
+
         Npgsql.NpgsqlDataAdapter _adapter;
 
-        // DataSet temporal donde se cargan los resultados de las consultas.
         DataSet _ds;
 
-        /// <summary>
-        /// Inicializa la conexión, comando y configura la cadena de conexión
-        /// tomada de <c>ConfigurationManager.ConnectionStrings["cad_con"]</c>.
-        /// </summary>
         public Database()
         {
             _con = new Npgsql.NpgsqlConnection();
@@ -41,15 +32,11 @@ namespace Parcial2DesIV.Datos
         }
 
 
-        /// <summary>
-        /// Valida las credenciales de un usuario llamando a la función de BD
-        /// <c>fn_validar_login</c> con los parámetros de usuario y contraseña.
-        /// Si la función devuelve datos, mapea la primera fila a un objeto <see cref="Usuarios"/>.
-        /// En caso de error o si no se encuentra el usuario, devuelve <c>null</c>.
-        /// </summary>
-        /// <param name="usuario">Nombre de usuario a validar.</param>
-        /// <param name="contrasena">Contraseña asociada al usuario.</param>
-        /// <returns>Un objeto <see cref="Usuarios"/> con los datos del usuario o <c>null</c> si no existe/ocurre un error.</returns>
+        // Valida las credenciales de un usuario llamando a la función de BD
+        // fn_validar_login con los parámetros de usuario y contraseña.
+        // Si la función devuelve datos, mapea la primera fila a un objeto Usuarios.
+        // En caso de error o si no se encuentra el usuario, devuelve null.
+       
         public Usuarios ValidarLogin(string usuario, string contrasena)
         {
             try
@@ -82,8 +69,6 @@ namespace Parcial2DesIV.Datos
             }
             catch (Exception ex)
             {
-                // Se registra el error en la consola. En una aplicación real se preferiría
-                // un mecanismo de logging más robusto.
                 Console.WriteLine("Error al validar login: " + ex.Message);
                 return null;
             }
@@ -97,14 +82,11 @@ namespace Parcial2DesIV.Datos
         }
 
 
-        /// <summary>
-        /// Obtiene la lista de cuentas asociadas a un usuario específico llamando a la
-        /// función de base de datos <c>fn_obtener_cuentas_usuario</c>.
-        /// Mapea cada fila resultante a un objeto <see cref="Cuentas"/> y devuelve
-        /// una lista con todas las cuentas encontradas.
-        /// </summary>
-        /// <param name="id_usuario">Identificador del usuario cuyas cuentas se desean obtener.</param>
-        /// <returns>Lista de objetos <see cref="Cuentas"/> (vacía si no hay cuentas o si ocurre un error).</returns>
+        
+        // Obtiene la lista de cuentas asociadas a un usuario específico llamando a la
+        // función de base de datos fn_obtener_cuentas_usuario.
+        // Mapea cada fila resultante a un objeto Cuentas y devuelve
+        // una lista con todas las cuentas encontradas.
         public List<Cuentas> ObtenerCuentasUsuario(int id_usuario)
         {
             List<Cuentas> listaCuentas = new List<Cuentas>();
@@ -135,7 +117,7 @@ namespace Parcial2DesIV.Datos
             }
             catch (Exception ex)
             {
-                // Se devuelve la lista (posiblemente vacía) y se registra el error en consola.
+                
                 Console.WriteLine("Error al obtener cuentas del usuario: " + ex.Message);
                 return listaCuentas;
             }
@@ -150,13 +132,10 @@ namespace Parcial2DesIV.Datos
         }
 
 
-        /// <summary>
-        /// Verifica si existe una cuenta destino por número de cuenta llamando a la función
-        /// de BD <c>fn_verificar_destino</c>. Si la función devuelve datos, mapea la primera fila
-        /// a un objeto <see cref="Cuentas"/> con la información mínima necesaria (id, número y saldo).
-        /// </summary>
-        /// <param name="num_cuenta">Número de cuenta destino a verificar.</param>
-        /// <returns>Objeto <see cref="Cuentas"/> con la información encontrada o <c>null</c> si no existe/ocurre un error.</returns>
+        
+        // Verifica si existe una cuenta destino por número de cuenta llamando a la función
+        // de BD fn_verificar_destino. Si la función devuelve datos, mapea la primera fila
+        // a un objeto Cuentas con la información mínima necesaria (id, número y saldo).
         public Cuentas VerificarDestino(string num_cuenta)
         {
             try
