@@ -8,11 +8,11 @@ namespace Parcial2DesIV.Modelos
 {
     public class ResultadoTransaccion
     {
-        string mensaje { get; set; }
-        string cuenta_origen { get; set; }
-        string cuenta_destino { get; set; }
-        string destinatario { get; set; }
-        decimal monto { get; set; }
-        DateTime fecha { get; set; }
+        public string mensaje { get; set; }
+        public string cuenta_origen { get; set; }
+        public string cuenta_destino { get; set; }
+        public string destinatario { get; set; }
+        public decimal monto { get; set; }
+        public DateTime fecha { get; set; }
     }
 }

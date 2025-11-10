@@ -104,6 +104,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Modelos\Cuentas.cs" />
+    <Compile Include="Modelos\HistorialTransaccion.cs" />
+    <Compile Include="Modelos\ResultadoTransaccion.cs" />
     <Compile Include="Modelos\Transacciones.cs" />
     <Compile Include="Modelos\Usuarios.cs" />
     <Compile Include="Program.cs" />

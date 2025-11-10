@@ -36,7 +36,7 @@ namespace Parcial2DesIV.Datos
         // fn_validar_login con los parámetros de usuario y contraseña.
         // Si la función devuelve datos, mapea la primera fila a un objeto Usuarios.
         // En caso de error o si no se encuentra el usuario, devuelve null.
-       
+
         public Usuarios ValidarLogin(string usuario, string contrasena)
         {
             try
@@ -82,7 +82,7 @@ namespace Parcial2DesIV.Datos
         }
 
 
-        
+
         // Obtiene la lista de cuentas asociadas a un usuario específico llamando a la
         // función de base de datos fn_obtener_cuentas_usuario.
         // Mapea cada fila resultante a un objeto Cuentas y devuelve
@@ -96,7 +96,7 @@ namespace Parcial2DesIV.Datos
                 _cmd.CommandType = CommandType.Text;
                 _cmd.CommandText = "SELECT * FROM fn_obtener_cuentas_usuario(@p_id_usuario)";
                 _cmd.Parameters.Add(new Npgsql.NpgsqlParameter("p_id_usuario", id_usuario));
-                
+
                 _cmd.Connection.Open();
 
                 _ds = new DataSet();
@@ -112,12 +112,12 @@ namespace Parcial2DesIV.Datos
                         saldo = Convert.ToDecimal(row["saldo"])
                     });
                 }
-                
+
 
             }
             catch (Exception ex)
             {
-                
+
                 Console.WriteLine("Error al obtener cuentas del usuario: " + ex.Message);
                 return listaCuentas;
             }
@@ -132,7 +132,7 @@ namespace Parcial2DesIV.Datos
         }
 
 
-        
+
         // Verifica si existe una cuenta destino por número de cuenta llamando a la función
         // de BD fn_verificar_destino. Si la función devuelve datos, mapea la primera fila
         // a un objeto Cuentas con la información mínima necesaria (id, número y saldo).
@@ -159,7 +159,7 @@ namespace Parcial2DesIV.Datos
                         id = Convert.ToInt32(_ds.Tables[0].Rows[0]["id"]),
                         num_cuenta = _ds.Tables[0].Rows[0]["num_cuenta"].ToString(),
                         saldo = Convert.ToDecimal(_ds.Tables[0].Rows[0]["saldo"]),
-                        usuario_id = Convert.ToInt32(_ds.Tables[0].Rows[0]["usuario_id"]) 
+                        usuario_id = Convert.ToInt32(_ds.Tables[0].Rows[0]["usuario_id"])
                     };
                 }
                 return null;
@@ -179,9 +179,101 @@ namespace Parcial2DesIV.Datos
         }
 
 
-        // Miembro pendiente de implementación para obtener transacciones de un usuario.
-        // Actualmente es solo una referencia comentada en el código original.
-        public Transacciones ObtenerTransaccionesUsuario; // Aún tengo que implementarlo
+        // Obtiene el historial de transacciones de un usuario específico llamando a la función
+        // de base de datos fn_obtener_transacciones_usuario. Mapea cada fila resultante a un objeto
+        // HistorialTransaccion y devuelve una lista con todas las transacciones encontradas.
+        public List<HistorialTransaccion> ObtenerTransaccionesUsuario(int id_usuario)
+        {
+            List<HistorialTransaccion> listaTransacciones = new List<HistorialTransaccion>();
+            try
+            {
+                _cmd.Parameters.Clear();
+                _cmd.CommandType = CommandType.Text;
+                _cmd.CommandText = "SELECT * FROM fn_obtener_transacciones_usuario(@p_id_usuario)";
+                _cmd.Parameters.Add(new Npgsql.NpgsqlParameter("p_id_usuario", id_usuario));
+
+                _cmd.Connection.Open();
+
+                _ds = new DataSet();
+                _adapter = new Npgsql.NpgsqlDataAdapter(_cmd);
+                _adapter.Fill(_ds);
+                foreach (DataRow row in _ds.Tables[0].Rows)
+                {
+                    listaTransacciones.Add(new HistorialTransaccion
+                    {
+                        fecha = Convert.ToDateTime(row["fecha"]),
+                        tipo = row["tipo"].ToString(),
+                        cuenta_origen = row["cuenta_origen"].ToString(),
+                        cuenta_destino = row["cuenta_destino"].ToString(),
+                        contraparte = row["contraparte"].ToString(),
+                        monto = Convert.ToDecimal(row["monto"])
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al obtener transacciones del usuario: " + ex.Message);
+                return listaTransacciones;
+            }
+            finally
+            {
+                if (_cmd.Connection.State == ConnectionState.Open)
+                {
+                    _cmd.Connection.Close();
+                }
+            }
+            return listaTransacciones;
+        }
+
+        public ResultadoTransaccion RegistrarTransaccion(int id_cuenta_origen,
+            int id_cuenta_destino, decimal monto, DateTime fecha)
+        {
+            try
+            {
+                _cmd.Parameters.Clear();
+                _cmd.CommandType = CommandType.Text;
+                _cmd.CommandText = "SELECT * FROM fn_registrar_transaccion(@p_id_cuenta_origen, @p_id_cuenta_destino, @p_monto, @fecha)";
+                _cmd.Parameters.Add(new Npgsql.NpgsqlParameter("p_id_cuenta_origen", id_cuenta_origen));
+                _cmd.Parameters.Add(new Npgsql.NpgsqlParameter("p_id_cuenta_destino", id_cuenta_destino));
+                _cmd.Parameters.Add(new Npgsql.NpgsqlParameter("p_monto", monto));
+                _cmd.Parameters.Add(new Npgsql.NpgsqlParameter("fecha", fecha));
+
+                _cmd.Connection.Open();
+
+                _ds = new DataSet();
+                _adapter = new Npgsql.NpgsqlDataAdapter(_cmd);
+                _adapter.Fill(_ds);
+                
+                var datos = _ds.Tables[0].Rows[0]["mensaje"].ToString();
+                if (!string.IsNullOrEmpty(datos) && datos.ToLower().Contains("éxito"))
+                {
+                    var resultado = _ds.Tables[0].Rows[0];
+                    return new ResultadoTransaccion
+                    {
+                        mensaje = resultado["mensaje"].ToString(),
+                        cuenta_origen = resultado["cuenta_origen"].ToString(),
+                        cuenta_destino = resultado["cuenta_destino"].ToString(),
+                        destinatario = resultado["destinatario"].ToString(),
+                        monto = Convert.ToDecimal(resultado["monto"]),
+                        fecha = Convert.ToDateTime(resultado["fecha"])
+                    };
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al registrar la transacción: " + ex.Message);
+                return null;
+            }
+            finally
+            {
+                if (_cmd.Connection.State == ConnectionState.Open)
+                {
+                    _cmd.Connection.Close();
+                }
+            }
+        }
 
     }
 }

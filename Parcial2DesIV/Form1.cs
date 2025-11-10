@@ -29,10 +29,8 @@ namespace Parcial2DesIV
             if (usuario != null)
             {
                 MessageBox.Show("Login exitoso. Bienvenido " + usuario.nombre);
-                List<Modelos.Cuentas> cuentas = db.ObtenerCuentasUsuario(usuario.id);
+                List<Modelos.HistorialTransaccion> cuentas = db.ObtenerTransaccionesUsuario(usuario.id);
                 dgtPrueba.DataSource = cuentas;
-                dgtPrueba.Columns["usuario_id"].Visible = false;
-                dgtPrueba.Columns["id"].Visible = false;
             }
             else
             {
