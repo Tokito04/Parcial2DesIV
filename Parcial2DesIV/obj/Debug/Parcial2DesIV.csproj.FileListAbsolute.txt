@@ -40,3 +40,5 @@ O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.csproj.CoreCompileIn
 O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2.9EB83FB9.Up2Date
 O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.exe
 O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.pdb
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.exe.config
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Form1.resources

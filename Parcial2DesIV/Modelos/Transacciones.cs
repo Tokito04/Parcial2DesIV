@@ -11,7 +11,7 @@ namespace Parcial2DesIV.Modelos
         public int id { get; set; }
         public string id_cuenta_origen { get; set; }
         public string id_cuenta_destino { get; set; }
-        public float monto { get; set; }
+        public decimal monto { get; set; }
         public DateTime fecha { get; set; }
     }
 }
