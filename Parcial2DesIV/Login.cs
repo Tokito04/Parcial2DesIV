@@ -10,14 +10,19 @@ using System.Windows.Forms;
 
 namespace Parcial2DesIV
 {
-    public partial class Form1 : Form
+    public partial class Login : Form
     {
-        public Form1()
+        public Login()
         {
             InitializeComponent();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnLogin_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtUsuario.Text) || string.IsNullOrEmpty(txtContrasena.Text))
             {
@@ -29,12 +34,17 @@ namespace Parcial2DesIV
             if (usuario != null)
             {
                 MessageBox.Show("Login exitoso. Bienvenido " + usuario.nombre);
-                List<Modelos.HistorialTransaccion> cuentas = db.ObtenerTransaccionesUsuario(usuario.id);
-                dgtPrueba.DataSource = cuentas;
+                MenuPrincipal menu = new MenuPrincipal(usuario);
+                menu.Show();
+                this.Hide();
             }
             else
             {
                 MessageBox.Show("Usuario o contraseña incorrectos.");
+                MenuPrincipal menu = new MenuPrincipal(usuario);
+                menu.Show();
+                this.Hide();
+
             }
         }
     }
