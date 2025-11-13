@@ -25,7 +25,6 @@ namespace Parcial2DesIV
             lblNumeroCuentaOrigen.Text = numeroOrigen;
             lblNumeroCuentaDestino.Text = numeroDestino;
             lblMontoEnviar.Text = monto.ToString("C2");
-            lblNombreUsuario.Text = "Usuario destino ID: " + usuarioDestinoId.ToString();
             btnVolver.Click -= BtnVolver_Click;
             btnVolver.Click += BtnVolver_Click;
             btnConfirmar.Click -= BtnConfirmar_Click;
@@ -47,40 +46,23 @@ namespace Parcial2DesIV
                 var resultado = db.RegistrarTransaccion(idOrigen, idDestino, monto, DateTime.Now);
                 if (resultado != null)
                 {
-                    MessageBox.Show("Transacción realizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    FinalForm final = new FinalForm(resultado);
+                    final.ShowDialog();
                     this.DialogResult = DialogResult.OK;
                     this.Close();
+                    
                 }
                 else
                 {
                     // Si la BD no devolvió resultado, permitir simulación para pruebas locales
-                    var res = MessageBox.Show("No se obtuvo confirmación desde la base de datos. ¿Desea simular la transacción para pruebas?", "Simular transacción", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (res == DialogResult.Yes)
-                    {
-                        MessageBox.Show("Simulación: Transacción realizada con éxito.", "Éxito (simulado)", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.DialogResult = DialogResult.OK;
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al procesar la transacción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    
+                    MessageBox.Show("Error al procesar la transacción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    
                 }
             }
             catch (Exception ex)
             {
-                // Si ocurre un error de BD, ofrecer simular la transacción para facilitar pruebas de UI
-                var resp = MessageBox.Show("Error al procesar la transacción: " + ex.Message + "\n\n¿Desea simular la transacción para pruebas?", "Error (simulación)", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (resp == DialogResult.Yes)
-                {
-                    MessageBox.Show("Simulación: Transacción realizada con éxito.", "Éxito (simulado)", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Operación cancelada.", "Cancelado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                MessageBox.Show("Error al procesar la transacción: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

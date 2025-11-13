@@ -41,9 +41,6 @@ namespace Parcial2DesIV
             else
             {
                 MessageBox.Show("Usuario o contraseña incorrectos.");
-                MenuPrincipal menu = new MenuPrincipal(usuario);
-                menu.Show();
-                this.Hide();
 
             }
         }

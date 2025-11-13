@@ -41,7 +41,6 @@ O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2.9EB83FB9.Up2Date
 O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.exe
 O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.pdb
 O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.exe.config
-O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Form1.resources
 C:\Users\pinto\Source\Repos\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.csproj.AssemblyReference.cache
 C:\Users\pinto\Source\Repos\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.exe.config
 C:\Users\pinto\Source\Repos\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Properties.Resources.resources
@@ -91,3 +90,10 @@ C:\Users\pinto\Source\Repos\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.
 C:\Users\pinto\Source\Repos\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Transacción.resources
 C:\Users\pinto\Source\Repos\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Confirmacion.resources
 C:\Users\pinto\Source\Repos\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Historial.resources
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Cierre.resources
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Confirmacion.resources
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Historial.resources
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Login.resources
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.MenuPrincipal.resources
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.Transacción.resources
+O:\DSIV\Parcial2DesIV\Parcial2DesIV\obj\Debug\Parcial2DesIV.FinalForm.resources

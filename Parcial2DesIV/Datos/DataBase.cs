@@ -108,6 +108,7 @@ namespace Parcial2DesIV.Datos
                     {
                         id = Convert.ToInt32(row["id"]),
                         nombre = row["nombre"].ToString(),
+                        usuario_id = Convert.ToInt32(row["usuario_id"]),
                         num_cuenta = row["numero_cuenta"].ToString(),
                         saldo = Convert.ToDecimal(row["saldo"])
                     });

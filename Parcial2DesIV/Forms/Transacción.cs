@@ -13,48 +13,31 @@ namespace Parcial2DesIV
 {
     public partial class Transacción : Form
     {
-        private Modelos.Cuentas CuentaOrigen;
-        private Modelos.Usuarios UsuarioActual;
+        private List<Modelos.Cuentas> cuentasTransaccion;
 
         public Transacción()
         {
             InitializeComponent();
             this.btnSiguienteConfirmacion.Click += BtnSiguienteConfirmacion_Click;
-            this.Load += Transacción_Load;
-
             // validar entrada del monto: permitir solo números, punto o coma y control
             this.txtMonto.KeyPress -= TxtMonto_KeyPress;
             this.txtMonto.KeyPress += TxtMonto_KeyPress;
         }
 
-        public Transacción(Modelos.Cuentas cuentaOrigen) : this()
+        public Transacción(List<Modelos.Cuentas> cuentasTransaccion) : this()
         {
-            this.CuentaOrigen = cuentaOrigen;
-            // Si se recibe cuenta origen, mostrarla en la etiqueta
-            if (cuentaOrigen != null)
+            this.cuentasTransaccion = cuentasTransaccion;
+
+            if (cuentasTransaccion != null)
             {
-                lblCuentaOrigen.Text = $"Cuenta origen: {cuentaOrigen.num_cuenta} - {cuentaOrigen.nombre} (Saldo: {cuentaOrigen.saldo:C2})";
+                // Mostrar el número de cuenta en el ComboBox
+                cmbCuentaOrigen.DisplayMember = "num_cuenta";
+                cmbCuentaOrigen.ValueMember = "id";
+                cmbCuentaOrigen.DataSource = cuentasTransaccion;
             }
         }
 
-        // Nueva sobrecarga que recibe cuenta origen y usuario
-        public Transacción(Modelos.Cuentas cuentaOrigen, Modelos.Usuarios usuario) : this(cuentaOrigen)
-        {
-            this.UsuarioActual = usuario;
-        }
-
-        public Transacción(Modelos.Usuarios usuario) : this()
-        {
-            this.UsuarioActual = usuario;
-        }
-
-        private void Transacción_Load(object sender, EventArgs e)
-        {
-            if (this.CuentaOrigen == null)
-            {
-                lblCuentaOrigen.Text = "Cuenta origen: (seleccionada desde el menú principal)";
-            }
-        }
+        
 
         private void TxtMonto_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -68,7 +51,8 @@ namespace Parcial2DesIV
         private void BtnSiguienteConfirmacion_Click(object sender, EventArgs e)
         {
 
-            var cuentaSeleccionada = this.CuentaOrigen;
+            // Obtener el objeto Cuentas seleccionado desde SelectedItem
+            var cuentaSeleccionada = cmbCuentaOrigen.SelectedItem as Modelos.Cuentas;
             if (cuentaSeleccionada == null)
             {
                 MessageBox.Show("Seleccione la cuenta origen desde el Menú principal antes de realizar la transacción.");
@@ -87,14 +71,23 @@ namespace Parcial2DesIV
                 MessageBox.Show("Ingrese el monto a enviar.");
                 return;
             }
+            if(txtCuentaDestino.Text.Trim() == cuentaSeleccionada.num_cuenta)
+            {
+                MessageBox.Show("La cuenta destino no puede ser la misma que la cuenta origen.");
+                return;
+            }
 
 
             string raw = txtMonto.Text.Replace("$", "").Replace(",", "").Trim();
 
-            if (!decimal.TryParse(raw, out decimal monto))
+            if (!decimal.TryParse(raw, NumberStyles.Number | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal monto))
             {
-                MessageBox.Show("El monto debe ser numérico (formato en dólares). Ej: $1234.56");
-                return;
+                // Intentar con la cultura actual si falla con Invariant
+                if (!decimal.TryParse(raw, out monto))
+                {
+                    MessageBox.Show("El monto debe ser numérico (formato en dólares). Ej: $1234.56");
+                    return;
+                }
             }
 
             if (monto <= 0)
@@ -128,5 +121,7 @@ namespace Parcial2DesIV
                 this.Close();
             }
         }
+
+
     }
 }
