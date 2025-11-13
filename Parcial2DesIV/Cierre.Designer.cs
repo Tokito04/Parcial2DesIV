@@ -28,24 +28,53 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblCerrarSesionMensaje = new System.Windows.Forms.Label();
+            this.btnCerrarSesionSi = new System.Windows.Forms.Button();
+            this.btnCerrarSesionNo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // lblCerrarSesionMensaje
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(278, 69);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 20);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.lblCerrarSesionMensaje.AutoSize = true;
+            this.lblCerrarSesionMensaje.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCerrarSesionMensaje.ForeColor = System.Drawing.Color.White;
+            this.lblCerrarSesionMensaje.Location = new System.Drawing.Point(136, 59);
+            this.lblCerrarSesionMensaje.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblCerrarSesionMensaje.Name = "lblCerrarSesionMensaje";
+            this.lblCerrarSesionMensaje.Size = new System.Drawing.Size(239, 25);
+            this.lblCerrarSesionMensaje.TabIndex = 0;
+            this.lblCerrarSesionMensaje.Text = "MensajeCerrarSesion";
+            // 
+            // btnCerrarSesionSi
+            // 
+            this.btnCerrarSesionSi.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCerrarSesionSi.Location = new System.Drawing.Point(93, 208);
+            this.btnCerrarSesionSi.Name = "btnCerrarSesionSi";
+            this.btnCerrarSesionSi.Size = new System.Drawing.Size(75, 23);
+            this.btnCerrarSesionSi.TabIndex = 1;
+            this.btnCerrarSesionSi.Text = "Si";
+            this.btnCerrarSesionSi.UseVisualStyleBackColor = true;
+            // 
+            // btnCerrarSesionNo
+            // 
+            this.btnCerrarSesionNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCerrarSesionNo.Location = new System.Drawing.Point(334, 208);
+            this.btnCerrarSesionNo.Name = "btnCerrarSesionNo";
+            this.btnCerrarSesionNo.Size = new System.Drawing.Size(75, 23);
+            this.btnCerrarSesionNo.TabIndex = 2;
+            this.btnCerrarSesionNo.Text = "No";
+            this.btnCerrarSesionNo.UseVisualStyleBackColor = true;
             // 
             // Cierre
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label1);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.ClientSize = new System.Drawing.Size(533, 292);
+            this.Controls.Add(this.btnCerrarSesionNo);
+            this.Controls.Add(this.btnCerrarSesionSi);
+            this.Controls.Add(this.lblCerrarSesionMensaje);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Cierre";
             this.Text = "Cierre";
             this.ResumeLayout(false);
@@ -55,6 +84,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblCerrarSesionMensaje;
+        private System.Windows.Forms.Button btnCerrarSesionSi;
+        private System.Windows.Forms.Button btnCerrarSesionNo;
     }
 }

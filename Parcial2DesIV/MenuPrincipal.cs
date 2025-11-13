@@ -25,10 +25,8 @@ namespace Parcial2DesIV
         public MenuPrincipal(Modelos.Usuarios usuario)
         {
             InitializeComponent();
-            // Puedes guardar el usuario para mostrar información personalizada
             this.UsuarioActual = usuario;
 
-            // Enlazar eventos
             this.Load += MenuPrincipal_Load;
             this.btnTransaccion.Click += btnTransaccion_Click;
             this.btnHistorial.Click += btnHistorial_Click;
@@ -48,6 +46,7 @@ namespace Parcial2DesIV
             else
             {
                 lblNombreUsuario.Text = "Bienvenido";
+                CargarCuentasUsuario(-1);
             }
         }
 
@@ -56,14 +55,37 @@ namespace Parcial2DesIV
             try
             {
                 var db = new Datos.Database();
-                List<Modelos.Cuentas> cuentas = db.ObtenerCuentasUsuario(idUsuario);
-                // Enlazar lista al ComboBox mostrando número, nombre y saldo
+                List<Modelos.Cuentas> cuentas = null;
+
+                try
+                {
+                    if (idUsuario > 0)
+                    {
+                        cuentas = db.ObtenerCuentasUsuario(idUsuario);
+                    }
+                }
+                catch
+                {
+                
+                    cuentas = null;
+                }
+
+
+                if (cuentas == null || cuentas.Count == 0)
+                {
+                    cuentas = new List<Modelos.Cuentas>
+                    {
+                        new Modelos.Cuentas { id = 1, num_cuenta = "000111222333", nombre = "Cuenta Prueba A", saldo = 5000m, usuario_id = idUsuario > 0 ? idUsuario : 1 },
+                        new Modelos.Cuentas { id = 2, num_cuenta = "000444555666", nombre = "Cuenta Prueba B", saldo = 1200.50m, usuario_id = idUsuario > 0 ? idUsuario : 1 }
+                    };
+                }
+
+
                 cboCuentas.FormattingEnabled = true;
                 cboCuentas.DataSource = null;
                 cboCuentas.ValueMember = "id";
                 cboCuentas.DataSource = cuentas;
 
-                // Attach format handler to display combined text
                 cboCuentas.Format -= CboCuentas_Format;
                 cboCuentas.Format += CboCuentas_Format;
 
@@ -97,7 +119,7 @@ namespace Parcial2DesIV
             }
 
             var cuenta = cboCuentas.SelectedItem as Modelos.Cuentas;
-            // Si el DataSource no es de tipo Cuentas (ej. valor de prueba), crear un objeto temporal
+
             if (cuenta == null)
             {
                 // Crear cuenta temporal de prueba
@@ -111,10 +133,10 @@ namespace Parcial2DesIV
                 };
             }
 
-            // Abrir formulario de transacciones pasando la cuenta origen como modal
-            Transacción trans = new Transacción(cuenta);
+ 
+            Transacción trans = new Transacción(cuenta, this.UsuarioActual);
             var result = trans.ShowDialog();
-            // Si la transacción fue confirmada correctamente, refrescar las cuentas
+
             if (result == DialogResult.OK && this.UsuarioActual != null)
             {
                 CargarCuentasUsuario(this.UsuarioActual.id);
@@ -123,29 +145,63 @@ namespace Parcial2DesIV
 
         private void btnHistorial_Click(object sender, EventArgs e)
         {
-            // Abrir formulario de historial (si deseas pasar el usuario o id, agrega constructor)
-            Historial h = new Historial();
-            // Si el formulario Historial tiene lógica para cargar datos, podrías pasar el id
+            // Abrir formulario de historial pasando el usuario actual si existe
+            Historial h;
+            if (this.UsuarioActual != null)
+            {
+                h = new Historial(this.UsuarioActual);
+            }
+            else
+            {
+                // Para pruebas locales, pasar el id de la primera cuenta si existe
+                var primera = cboCuentas.SelectedItem as Modelos.Cuentas;
+                if (primera != null)
+                {
+                    h = new Historial(primera.usuario_id);
+                }
+                else
+                {
+                    h = new Historial();
+                }
+            }
             h.Show();
         }
 
         private void btnCerrarSesión_Click(object sender, EventArgs e)
         {
-            // Abrir formulario de cierre (opcional) y volver al Login
+
             try
             {
-                Cierre cierre = new Cierre();
-                cierre.ShowDialog();
+                using (Cierre cierre = new Cierre())
+                {
+                    var result = cierre.ShowDialog();
+                    if (result == DialogResult.Yes)
+                    {
+                        // Llevar al Login
+                        var login = new Login();
+                        login.Show();
+                        this.Close();
+                        return;
+                    }
+                    else if (result == DialogResult.No)
+                    {
+
+                        return;
+                    }
+                    else
+                    {
+
+                        return;
+                    }
+                }
             }
             catch
             {
-                // Ignorar si no se desea mostrar el formulario de cierre
+                // Si ocurre un error al mostrar el formulario de cierre, por seguridad volver al Login
+                var login = new Login();
+                login.Show();
+                this.Close();
             }
-
-            // Volver al Login
-            var login = new Login();
-            login.Show();
-            this.Close();
         }
     }
 }

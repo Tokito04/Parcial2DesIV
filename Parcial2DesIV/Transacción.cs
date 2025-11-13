@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace Parcial2DesIV
 {
@@ -20,16 +21,26 @@ namespace Parcial2DesIV
             InitializeComponent();
             this.btnSiguienteConfirmacion.Click += BtnSiguienteConfirmacion_Click;
             this.Load += Transacción_Load;
+
+            // validar entrada del monto: permitir solo números, punto o coma y control
+            this.txtMonto.KeyPress -= TxtMonto_KeyPress;
+            this.txtMonto.KeyPress += TxtMonto_KeyPress;
         }
 
         public Transacción(Modelos.Cuentas cuentaOrigen) : this()
         {
             this.CuentaOrigen = cuentaOrigen;
-            // Si se recibe cuenta origen, preseleccionarla en el combo
+            // Si se recibe cuenta origen, mostrarla en la etiqueta
             if (cuentaOrigen != null)
             {
                 lblCuentaOrigen.Text = $"Cuenta origen: {cuentaOrigen.num_cuenta} - {cuentaOrigen.nombre} (Saldo: {cuentaOrigen.saldo:C2})";
             }
+        }
+
+        // Nueva sobrecarga que recibe cuenta origen y usuario
+        public Transacción(Modelos.Cuentas cuentaOrigen, Modelos.Usuarios usuario) : this(cuentaOrigen)
+        {
+            this.UsuarioActual = usuario;
         }
 
         public Transacción(Modelos.Usuarios usuario) : this()
@@ -39,55 +50,32 @@ namespace Parcial2DesIV
 
         private void Transacción_Load(object sender, EventArgs e)
         {
-            // Cargar cuentas del usuario en cboCuentaOrigen (si UsuarioActual existe)
-            try
+            if (this.CuentaOrigen == null)
             {
-                var db = new Datos.Database();
-                List<Modelos.Cuentas> cuentas = new List<Modelos.Cuentas>();
-                if (this.UsuarioActual != null)
-                {
-                    cuentas = db.ObtenerCuentasUsuario(this.UsuarioActual.id);
-                }
-                else if (this.CuentaOrigen != null)
-                {
-                    cuentas.Add(this.CuentaOrigen);
-                }
-
-                cboCuentaOrigen.DisplayMember = "num_cuenta";
-                cboCuentaOrigen.ValueMember = "id";
-                cboCuentaOrigen.DataSource = cuentas;
-
-                if (this.CuentaOrigen != null)
-                {
-                    // seleccionar la cuenta recibida
-                    for (int i = 0; i < cboCuentaOrigen.Items.Count; i++)
-                    {
-                        var c = cboCuentaOrigen.Items[i] as Modelos.Cuentas;
-                        if (c != null && c.id == this.CuentaOrigen.id)
-                        {
-                            cboCuentaOrigen.SelectedIndex = i;
-                            break;
-                        }
-                    }
-                }
+                lblCuentaOrigen.Text = "Cuenta origen: (seleccionada desde el menú principal)";
             }
-            catch (Exception ex)
+        }
+
+        private void TxtMonto_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != ',')
             {
-                MessageBox.Show("Error al cargar cuentas origen: " + ex.Message);
+                e.Handled = true;
             }
         }
 
         private void BtnSiguienteConfirmacion_Click(object sender, EventArgs e)
         {
-            // Obtener cuenta origen seleccionada
-            var cuentaSeleccionada = cboCuentaOrigen.SelectedItem as Modelos.Cuentas;
+
+            var cuentaSeleccionada = this.CuentaOrigen;
             if (cuentaSeleccionada == null)
             {
-                MessageBox.Show("Seleccione una cuenta origen.");
+                MessageBox.Show("Seleccione la cuenta origen desde el Menú principal antes de realizar la transacción.");
                 return;
             }
 
-            // Validaciones
+
             if (string.IsNullOrWhiteSpace(txtCuentaDestino.Text))
             {
                 MessageBox.Show("Ingrese la cuenta destino.");
@@ -100,9 +88,12 @@ namespace Parcial2DesIV
                 return;
             }
 
-            if (!decimal.TryParse(txtMonto.Text, out decimal monto))
+
+            string raw = txtMonto.Text.Replace("$", "").Replace(",", "").Trim();
+
+            if (!decimal.TryParse(raw, out decimal monto))
             {
-                MessageBox.Show("El monto debe ser numérico.");
+                MessageBox.Show("El monto debe ser numérico (formato en dólares). Ej: $1234.56");
                 return;
             }
 

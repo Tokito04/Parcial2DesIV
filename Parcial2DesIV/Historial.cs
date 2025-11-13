@@ -27,8 +27,7 @@ namespace Parcial2DesIV
 
         public Historial(int idUsuario) : this()
         {
-            // Si se desea, se puede obtener el usuario por id desde la BD en el futuro
-            // Por ahora guardamos sólo el id en un usuario temporal
+
             this.UsuarioActual = new Modelos.Usuarios { id = idUsuario };
         }
 
@@ -38,7 +37,6 @@ namespace Parcial2DesIV
             {
                 if (this.UsuarioActual == null || this.UsuarioActual.id <= 0)
                 {
-                    // No hay usuario; no cargar transacciones
                     return;
                 }
 
