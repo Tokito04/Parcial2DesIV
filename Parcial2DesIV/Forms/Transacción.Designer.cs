@@ -93,9 +93,9 @@
             this.lblSimboloDolar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSimboloDolar.Location = new System.Drawing.Point(37, 329);
             this.lblSimboloDolar.Name = "lblSimboloDolar";
-            this.lblSimboloDolar.Size = new System.Drawing.Size(20, 24);
+            this.lblSimboloDolar.Size = new System.Drawing.Size(32, 24);
             this.lblSimboloDolar.TabIndex = 7;
-            this.lblSimboloDolar.Text = "$";
+            this.lblSimboloDolar.Text = "B./";
             // 
             // cmbCuentaOrigen
             // 
